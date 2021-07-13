@@ -1,6 +1,6 @@
-import 'package:flutter/material.dart';
 import 'dart:async';
 
+import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
 import 'package:logger_flutter/logger_flutter.dart';
 
@@ -11,6 +11,8 @@ void main() {
 
 var logger = Logger(
   printer: PrettyPrinter(),
+  output: LogConsole.wrap(innerOutput: ConsoleOutput()),
+  filter: ProductionFilter(),
 );
 
 var loggerNoStack = Logger(
@@ -34,14 +36,21 @@ void log() {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: Scaffold(
-        body: LogConsoleOnShake(
-          dark: true,
-          child: Center(
-            child: Text("Shake Phone to open Console."),
-          ),
+    return MaterialApp(debugShowCheckedModeBanner: false, home: App());
+  }
+}
+
+class App extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Center(
+        child: MaterialButton(
+          color: Colors.green,
+          child: Text("Open the logs"),
+          onPressed: () {
+            LogConsole.openLogConsole(context);
+          },
         ),
       ),
     );
